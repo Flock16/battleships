@@ -50,12 +50,26 @@ class PlayerType {
   generateAttack() {
     let newAttack = null;
 
+    // Gank way to remove cells that have already been interacted with
+    if (this.surroundingAttacks.length !== 0) {
+      for (let i = 0; i < this.surroundingAttacks.length; i++) {
+        let x = this.surroundingAttacks[i][0];
+        let y = this.surroundingAttacks[i][1];
+        if (
+          this.gameboard.board[x][y].display === "H" ||
+          this.gameboard.board[x][y].display === "S"
+        ) {
+          this.surroundingAttacks.splice(i, 1);
+        }
+      }
+    }
+
     if (this.prevAttackHit) {
       let newAttacks = this.generateValidAttacks();
-      console.log(newAttacks);
-      //   console.log(this.attacks);
+      // console.log(newAttacks);
+      // console.log(this.attacks);
       this.surroundingAttacks = [...this.surroundingAttacks, ...newAttacks];
-      console.log(this.surroundingAttacks);
+      // console.log(this.surroundingAttacks);
 
       if (this.surroundingAttacks.length !== 0) {
         newAttack = this.surroundingAttacks.pop();
@@ -71,6 +85,14 @@ class PlayerType {
       }
     } else if (this.surroundingAttacks.length !== 0) {
       newAttack = this.surroundingAttacks.pop();
+      for (let i = 0; i < this.attacks.length; i++) {
+        if (
+          newAttack[0] === this.attacks[i][0] &&
+          newAttack[1] === this.attacks[i][1]
+        ) {
+          this.attacks.splice(i, 1);
+        }
+      }
       return newAttack;
     }
 
@@ -79,7 +101,7 @@ class PlayerType {
 
   generateValidAttacks() {
     let [y, x] = this.prevAttack;
-    console.log(y, x);
+    // console.log(y, x);
     const newAttacks = [
       [1, 0],
       [-1, 0],
@@ -99,14 +121,14 @@ class PlayerType {
         );
       })
       .filter(([fy, fx]) => {
-        console.log("In the filter: " + fy, fx);
-        console.log(this.gameboard.board[fy][fx].display);
+        // console.log("In the filter: " + fy, fx);
+        // console.log(this.gameboard.board[fy][fx].display);
         return (
           this.gameboard.board[fy][fx].display === "O" ||
           this.gameboard.board[fy][fx].display === "B"
         );
       });
-    console.log(tempArr);
+    // console.log(tempArr);
     return tempArr;
   }
 

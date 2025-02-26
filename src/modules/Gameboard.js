@@ -150,7 +150,7 @@ class Gameboard {
         tempArr[i][j] = this.board[i][j].display;
       }
     }
-    console.log(tempArr);
+    // console.log(tempArr);
   }
 }
 
